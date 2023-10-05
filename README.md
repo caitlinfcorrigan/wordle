@@ -14,11 +14,13 @@ HTML, CSS, and JavaScript
 
 ---
 ## MVP Goals
-* Generate a list of valid, 5-letter word from an Egnlish dictionary or other source and then pick a secret word
-* Render the board as a grid of 6 rows of 5 rectangles (array of arrays)
+* Generate a list of valid, 5-letter word from an English dictionary or other source
+* Add the list of words to an array as uppercase strings
+* Pick a secret word
+* Render the board as a grid of 6 rows of 5 squares (array of arrays)
 * Accept player guesses via keyboard; only accept letters (A-Z)
-* As the player types, the letter displays in the current row (first guess is the top row)
-* When the player clicks the Guess button or presses enter, validate that the guess is 5 letters and that it is a word (check against list)
+* As the player types, the letter displays in uppercase in the current row (first guess is the top row)
+* When the player clicks the Guess button or presses enter, validate that the guess is 5 letters, convert the string to uppercase, and check that it is a word (find it in the list)
     * If it's not a word, clear the guess and display message "Not a valid word"
     * If it's a valid guess, compare the player's guess against the secret word
 * Save the guess in the row and highlight letters as follows:
