@@ -6,8 +6,61 @@
     <title>Wordle</title>
     <script defer src="main.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    
+    <!-- If creating Quordle, perhaps use a header with a menu bar so the player can switch between classic and Quordle
+    If so, nested h1 in the header tags-->
+    <h1>Let's Wordle!</h1>
+    <h2>Type your guess, then press Enter to guess</h2>
+
+    <section class = "game-grid">
+        <!-- Connect 4 used IDs structured like C#R# instead-->
+        <div class = "guess" id = "0">
+            <div class = "char" id = "0"></div>
+            <div class = "char" id = "1"></div>
+            <div class = "char" id = "2"></div>
+            <div class = "char" id = "3"></div>
+            <div class = "char" id = "4"></div>
+        </div>
+        <div class = "guess" id = "1">
+            <div class = "char" id = "0"></div>
+            <div class = "char" id = "1"></div>
+            <div class = "char" id = "2"></div>
+            <div class = "char" id = "3"></div>
+            <div class = "char" id = "4"></div>
+        </div>
+        <div class = "guess" id = "2">
+            <div class = "char" id = "0"></div>
+            <div class = "char" id = "1"></div>
+            <div class = "char" id = "2"></div>
+            <div class = "char" id = "3"></div>
+            <div class = "char" id = "4"></div>
+        </div>
+        <div class = "guess" id = "3">
+            <div class = "char" id = "0"></div>
+            <div class = "char" id = "1"></div>
+            <div class = "char" id = "2"></div>
+            <div class = "char" id = "3"></div>
+            <div class = "char" id = "4"></div>
+        </div>
+        <div class = "guess" id = "4">
+            <div class = "char" id = "0"></div>
+            <div class = "char" id = "1"></div>
+            <div class = "char" id = "2"></div>
+            <div class = "char" id = "3"></div>
+            <div class = "char" id = "4"></div>
+        </div>
+        <div class = "guess" id = "5">
+            <div class = "char" id = "0"></div>
+            <div class = "char" id = "1"></div>
+            <div class = "char" id = "2"></div>
+            <div class = "char" id = "3"></div>
+            <div class = "char" id = "4"></div>
+        </div>
+    </section>
+    <button>Play Again!</button>
 </body>
 </html>
