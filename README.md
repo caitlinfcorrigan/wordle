@@ -1,48 +1,65 @@
 # Wordle
-Wordle is a single-player game. The player tries to guess the secret 5-letter word. If the guess is correct, all five letters display in green. If a guess is incorrect, any letters that are in the secret word and in the correct position display in green. Any letters in the secret word, but in the wrong position, display in yellow. The game displays the player's previous guesses.
+Wordle rose to prominence in late 2021 while most of the world was actively combatting the coronavirus pandemic. Artist and engineer Josh Wardle originally created Wordle for his partner, a word game enthusist, years earlier. Its gameplay mimics other games such as Jotto, the gameshow Lingo, and Mastermind. The New York Times purchased Wordle at the beginning of 2022, while Merriam-Webster purchased Quordle, a popular spin-off of Wordle.
 
-If the player is unable to guess the secret word within six guesses, they lose.
+Wordle is a single-player game in which the player tries to guess the secret 5-letter word.
 
-At the end of the game (win or lose), the player can choose to play again with a new secret word.
----
+To help the player guess the word, each letter of their incorrect guess displays in a color that hints towards the correct word. Letters that are not in the secret word display in dark gray boxes. Letters that are in the secret word, but not the correct location display in yellow boxes. Letters that are in the secret word and the correct position display in green boxes.
+
+The game ends when the user guesses the word or loses by playing 6 incorrect guesses.
+
+Unlike the New York Times' version, users can choose to play again with a new secret word, rather than waiting until the next day.
+
+
 ## Technologies Used
 HTML, CSS, and JavaScript
 
----
+
 ## Wireframes
 
+<!-- local image -->
+![Wordle Wireframe](wireframe.png) ![Quordle Wireframe](wireframe-stretch.png)
 
----
-## MVP Goals
+## MVP Needs
 * Generate a list of valid, 5-letter word from an English dictionary or other source
 * Add the list of words to an array as uppercase strings
-* Pick a secret word
-* Render the board as a grid of 6 rows of 5 squares (array of arrays)
+* Pick a secret word from the list
+* Render the board as a grid of 6 rows of 5 squares (columns)
 * Accept player guesses via keyboard; only accept letters (A-Z)
-* As the player types, the letter displays in uppercase in the current row (first guess is the top row)
-* When the player clicks the Guess button or presses enter, validate that the guess is 5 letters, convert the string to uppercase, and check that it is a word (find it in the list)
+* As the player types, display the letter in uppercase in the current row (first guess is the top row)
+* When the player clicks the Guess button or presses enter, validate that the guess is 5 letters and check that it is a valid word (find it in the list)
     * If it's not a word, clear the guess and display message "Not a valid word"
-    * If it's a valid guess, compare the player's guess against the secret word
-* Save the guess in the row and highlight letters as follows:
-    * Dark gray: The letter is not in the secret word
-    * Yellow: The letter is in the secret word, but a different position
-    * Green: The letter is in the secret word and the correct position
-* The player wins if they guess the secret word by the 6th guess (all letters are green)
-* The player loses if they do not guess the secret word by the 6th guess
+    * If it's a valid guess, compare the player's guess against the secret word and update the display as follows:
+        * The letter is not in the secret word: Make the box dark gray
+        * The letter is in the secret word, but the wrong position: Make the box yellow
+        * The letter is in the secret word and in the correct position: Make the box green
+* The player wins if they guess the secret word by the 6th guess
+* The player loses if their 6th guess is incorrect
 * At the end, display button to allow the player to play again with a new word
 
----
+
 ## Stretch Goals
-* The game displays an on-screen keyboard which also highlights guessed letters (dark gray if not in the secret word, green if in the word and in the correct position, and yellow if in the secret word, but a different position)
-* The on-screen keyboard is clickable
-* The game counts the number of wins and 
-* Display game rules before the player can begin playing
+* The game displays an on-screen keyboard which highlights guessed letters according to correctness:
+    * Dark gray: Letter is not in the secret word
+    * Yellow: Letter is in the secret word, but a different position
+    * Green: Letter is in the secret word in the correct position
+* The on-screen keyboard is clickable and contains both Enter and Backspace buttons
+* The game counts the number of wins, losses, and longest streak
+* Display game rules before the player can begin playing and include examples
+* Animate the reveal of green/yellow letters after user clicks Guess
 
 ### Big Stretches
-* Display examples of green/yellow guesses in the game rules
-* Display 4 grids and 4 secret words; every guess evaluates against all 4 words. The player wins if they guess all 4 secret words within 9 guesses.
+* Display the keyboard with shifted letters, rather than as a plain grid
+* Expand game to Quordle:
+    * Display 4 grids and generate 4 secret words
+    * Every guess evaluates against all 4 words
+    * The player wins if they guess all 4 secret words by their 9th guess
+    * Letters on the keyboard havee quadrants corresponding to a gameboard and the letter's correctness
+* Shrink the heigh of past guesses; only display current guess in squares
+* Display the four grids across the screen if it's a desktop (in mobile, display as 2x2 grid)
 
----
+
 ## Potential Roadblocks
 * Loading the word list into memory
 * Rendering an on-screen QWERTY keyboard with Return/Enter and Backspace keys
+* Accepting keyboard and on-screen inputs
+* Quordle: Updating 4 grids from a single guess
