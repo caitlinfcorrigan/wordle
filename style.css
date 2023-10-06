@@ -24,10 +24,13 @@ h2 {
     grid-template-rows: repeat(6, 10vmin);
     gap: .75vmin;
     justify-self: center;
+    align-self: stretch;
 }
 
 .game-grid > div {
     gap: .75vmin;
+    text-align: center;
+    font-size: 6vmin;
     border: solid darkgray .5vmin; 
 }
 
