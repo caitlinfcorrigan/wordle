@@ -20,19 +20,15 @@ h2 {
 
 .game-grid {
     display: grid;
+    grid-template-columns: repeat(5, 10vmin);
     grid-template-rows: repeat(6, 10vmin);
     gap: .75vmin;
     justify-self: center;
 }
 
-.game-grid > .guess {
-    display: grid;
-    grid-template-columns: repeat(5, 10vmin);
+.game-grid > div {
     gap: .75vmin;
-}
-
-.guess > .char {
-    border: solid darkgray .5vmin;
+    border: solid darkgray .5vmin; 
 }
 
 button {
