@@ -11,7 +11,7 @@ Unlike the New York Times' version, users can choose to play again with a new se
 
 
 ## Technologies Used
-HTML, CSS, and JavaScript
+HTML, CSS, JavaScript, DOM
 
 
 ## Wireframes
