@@ -78,7 +78,8 @@ function buildGuess(e){
     console.log(unsubmittedGuess)
 }
 
-function displayGuess(unsubmittedGuess, userGuess){
+// Must use the event as a param because of the eventListener
+function displayGuess(e){
     console.log(typeof(unsubmittedGuess))
     console.log(unsubmittedGuess)
     userGuess = unsubmittedGuess.join("")
