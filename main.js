@@ -34,14 +34,12 @@
 
 
 /*----- EVENT LISTENERS -----*/
-    // Listener for typed letters -- When user types, spell out the guess on screen
+    // Listener for keydown; calls function to determine appropriate response
     document.addEventListener("keydown", checkKeyDown)
 
-    // Listener for Enter button
 
-
-    // Temp listeners for Input & Guess buttons
-    submitGuess.addEventListener("click", colorGuess);
+    // For on-screen submission -- update when there's a keyboard
+    // submitGuess.addEventListener("click", colorGuess);
 
     // Listener for playAgain
     playAgain.addEventListener("click", init);
@@ -62,6 +60,7 @@
     function checkKeyDown(e) {
         // Check for letter input
         // https://internetdrew.medium.com/how-to-detect-a-letter-key-on-key-events-with-javascript-c749820dcd27
+        console.log(e.key)
         if (e.code === `Key${e.key.toUpperCase()}`){
             buildGuess(e);
         } else if (e.key === "Enter") {
@@ -73,15 +72,17 @@
         }
     }
 
-
     // Delete guessed letters (before submit)
     function deleteGuess(){
+        // Get array length (to determine DOM elem to clear)
+        let lastLetter = userGuess.length
+        // Delete last letter from userGuess
         userGuess.pop()
+        // Delete last letter from the DOM
+        let squareEl = document.querySelector(`#g${guessCount}c${lastLetter-1}`)
+        squareEl.innerHTML = "";
     }
 
-
-
-    // Need to figure out way to handle backspace
     function buildGuess(e){
         userGuess.push(e.key)
         userGuess.forEach((char,idx) => {
@@ -104,6 +105,11 @@
             squareEl.style.borderColor = CHECKS[result];
             squareEl.style.color = "white";
         })
+        guessCount++
+        // Reset userGuess
+        for (let i = 0; i < 5; i++) {
+            userGuess.pop();
+        }
     }
 
     function checkGuess(char, idx) {
