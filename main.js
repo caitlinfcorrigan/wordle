@@ -1,6 +1,6 @@
 /*----- CONSTANTS -----*/
     const CHECKS = {
-        notIn: "rgb(130, 130, 130)",
+        notIn: "rgb(110, 110, 110)",
         inDiffPos: "rgb(250, 175, 45)",
         inSamePos: "rgb(50, 155, 80)",
     }
@@ -21,7 +21,7 @@
     let submitGuess = document.querySelector("#guess")
 
     // Count the number of guesses? Or just do a check of the board's array?
-    let guessCount;
+    let guessCount = 0;
 
     // To return the outcome (win or loss)
     let outcome;
@@ -35,13 +35,13 @@
 
 /*----- EVENT LISTENERS -----*/
     // Listener for typed letters -- When user types, spell out the guess on screen
-    // document.addEventListener("keydown", spellGuess)
+    document.addEventListener("keydown", buildGuess)
 
     // Listener for Enter button
 
 
     // Temp listeners for Input & Guess buttons
-    submitGuess.addEventListener("click", compareGuess);
+    submitGuess.addEventListener("click", displayGuess);
 
     // Listener for playAgain
     playAgain.addEventListener("click", init);
@@ -53,41 +53,65 @@
 
 
 // Test the user's guess
-userGuess = "lucky";
+// userGuess = "lucky";
 secretWord = "cutie"
-function renderGuess(userGuess, secretWord) {
-    // For each letter in user guess, check secretWord
-    Array.from(userGuess).forEach((char,idx) => {
+
+
+
+function checkGuess(char, idx) {
+    // Check the char against secretWord
         if(char === secretWord[idx]) {
-            console.log("exact match");
             return "inSamePos";
         }
         else if (secretWord.includes(char)){   
-            console.log("it's there somewhere");
             return "inDiffPos";
         }
         else{
-            console.log("no dice");
             return "notIn";
         }
-        // console.log(char);
-        // console.log(secretWord[idx])
-    })
-        // 
 }
-renderGuess(userGuess, secretWord)
+// checkGuess(userGuess, secretWord)
+
+let unsubmittedGuess = [];
+function buildGuess(e){
+    unsubmittedGuess.push(e.key)
+    console.log(unsubmittedGuess)
+}
+
+function displayGuess(unsubmittedGuess, userGuess){
+    console.log(typeof(unsubmittedGuess))
+    console.log(unsubmittedGuess)
+    userGuess = unsubmittedGuess.join("")
+    console.log(userGuess)
+    // When the user clicks submit, grab their guess the input elem's value
+    // userGuess = document.querySelector("input").value
+    Array.from(userGuess).forEach((char,idx) => {
+        console.log(char)
+        // Display the char in the appropriate HTML element
+        let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
+        // Place the character in the inner text
+        squareEl.innerHTML = char;
+    })
+};
+
+function colorGuess(){
+    let result = checkGuess(char, idx, secretWord)
+    console.log(CHECKS[result])
+    squareEl.style.backgroundColor = CHECKS[result];
+    squareEl.style.borderColor = CHECKS[result];
+    squareEl.style.color = "white";
+}
+
+// displayGuess(userGuess)
+
+// Display
+// Wait for submit
+// After submit, checkGuess -> colorGuess
 
 
 function init() {
     // Initialize empty board in JS
-    board = [
-        [], // Row 0
-        [], // Row 1
-        [], // Row 2
-        [], // Row 3
-        [], // Row 4
-        [], // Row 5
-    ]
+    board = []
     // TBD - Figure out how to grab a secret word
     secretWord = "apple";
     outcome = null;
@@ -97,10 +121,6 @@ function init() {
 function render() {
     spellGuess(e);
     playAgain.style.visibility = winner ? 'visible' : 'hidden';
-}
-
-function compareGuess() {
-
 }
 
 
