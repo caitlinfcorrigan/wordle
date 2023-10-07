@@ -41,7 +41,7 @@
 
 
     // Temp listeners for Input & Guess buttons
-    submitGuess.addEventListener("click", displayGuess);
+    submitGuess.addEventListener("click", colorGuess);
 
     // Listener for playAgain
     playAgain.addEventListener("click", init);
@@ -58,7 +58,8 @@ secretWord = "cutie"
 
 
 
-function checkGuess(char, idx) {
+function checkGuess(e, char, idx) {
+    userGuess = unsubmittedGuess.join("")
     // Check the char against secretWord
         if(char === secretWord[idx]) {
             return "inSamePos";
@@ -73,29 +74,26 @@ function checkGuess(char, idx) {
 // checkGuess(userGuess, secretWord)
 
 let unsubmittedGuess = [];
+// Need to figure out way to handle backspace
 function buildGuess(e){
     unsubmittedGuess.push(e.key)
-    console.log(unsubmittedGuess)
-}
-
-// Must use the event as a param because of the eventListener
-function displayGuess(e){
-    console.log(typeof(unsubmittedGuess))
-    console.log(unsubmittedGuess)
-    userGuess = unsubmittedGuess.join("")
-    console.log(userGuess)
-    // When the user clicks submit, grab their guess the input elem's value
-    // userGuess = document.querySelector("input").value
-    Array.from(userGuess).forEach((char,idx) => {
-        console.log(char)
+    unsubmittedGuess.forEach((char,idx) => {
         // Display the char in the appropriate HTML element
         let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
         // Place the character in the inner text
         squareEl.innerHTML = char;
-    })
-};
+});
+}
 
-function colorGuess(){
+// Must use the event as a param because of the eventListener
+// function displayGuess(e){
+//     userGuess = unsubmittedGuess.join("")
+//     console.log(userGuess)
+
+// };
+
+// Callback function for click on Guess button
+function colorGuess(e){
     let result = checkGuess(char, idx, secretWord)
     console.log(CHECKS[result])
     squareEl.style.backgroundColor = CHECKS[result];
@@ -123,5 +121,4 @@ function render() {
     spellGuess(e);
     playAgain.style.visibility = winner ? 'visible' : 'hidden';
 }
-
 
