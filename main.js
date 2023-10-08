@@ -84,7 +84,10 @@
     }
 
     function buildGuess(e){
-        userGuess.push(e.key)
+        if (userGuess.length === 5) {
+            return
+        };
+        userGuess.push(e.key.toUpperCase())
         userGuess.forEach((char,idx) => {
             // Display the char in the appropriate HTML element
             let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
