@@ -42,7 +42,7 @@
     // submitGuess.addEventListener("click", colorGuess);
 
     // Listener for playAgain
-    playAgain.addEventListener("click", init);
+    playAgain.addEventListener("click", reset);
 
 
 /*----- FUNCTIONS -----*/
@@ -52,13 +52,12 @@
 
     // Test the user's guess
     // userGuess = "lucky";
-    secretWord = "cutie"
+    secretWord = "cutie".toUpperCase()
 
-    // checkGuess(userGuess, secretWord)
 
     // Keydown function -- calls buildGuess, colorGuess, deleteGuess, or throwInvalid
     function checkKeyDown(e) {
-        // Check for letter input
+        // Check if input is a letter
         // https://internetdrew.medium.com/how-to-detect-a-letter-key-on-key-events-with-javascript-c749820dcd27
         console.log(e.key)
         if (e.code === `Key${e.key.toUpperCase()}`){
@@ -108,7 +107,12 @@
             squareEl.style.borderColor = CHECKS[result];
             squareEl.style.color = "white";
         })
+        // Check for win
+        results.every("inSamePos")
+
+
         guessCount++
+        // Check for 6th guess loss
         // Reset userGuess
         for (let i = 0; i < 5; i++) {
             userGuess.pop();
@@ -127,14 +131,21 @@
                 return "notIn";
             }
         }
+    
+    // function checkForWin() {
+    //     if 
+    // }
 
-    function init() {
-        // Initialize empty board in JS
-        board = []
-        // TBD - Figure out how to grab a secret word
-        secretWord = "apple";
-        outcome = null;
-        render()
+    function reset(guessCount) {
+        // Reset every DOM element and delete previous guess (only in-mem array)
+        // Get array length (to determine DOM elem to clear)
+        for (let g = guessCount; g > -1; g--) {
+            for (let i = 4; i > -1; i--){
+                let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
+                squareEl.innerHTML = "";
+            }
+        }
+
     }
 
     function render() {
