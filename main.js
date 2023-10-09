@@ -108,11 +108,12 @@
             squareEl.style.color = "white";
         })
         // Check for win
-        results.every("inSamePos")
+        let winningLetters = (currChar) => currChar === "inSamePos";        
+        winResults = results.every(winningLetters);
+        checkForWin(winResults);
 
+        guessCount++;
 
-        guessCount++
-        // Check for 6th guess loss
         // Reset userGuess
         for (let i = 0; i < 5; i++) {
             userGuess.pop();
@@ -132,13 +133,34 @@
             }
         }
     
-    // function checkForWin() {
-    //     if 
-    // }
+    function checkForWin() {
+         if (winResults) {
+            // Remove the event listener -- stop accepting key input
+            document.removeEventListener("keydown", checkKeyDown);
+            // Display Winner message
+            outcomeMessage.innerText = "You win!"
+            // Render play again
+            render();
+            return true;
+         } else if (guessCount === 5) {
+            document.removeEventListener("keydown", checkKeyDown);
+            outcomeMessage.innerText = "You lost :("
+            render();
+         } else {
+            return;
+            
+            // Display loss message
+            // Let player play again
+
+         }
+    }
 
     function reset(guessCount) {
+        // Add back the keydown event listener
+        document.addEventListener("keydown", checkKeyDown)
         // Reset every DOM element and delete previous guess (only in-mem array)
         // Get array length (to determine DOM elem to clear)
+        console.log("Reset")
         for (let g = guessCount; g > -1; g--) {
             for (let i = 4; i > -1; i--){
                 let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
@@ -149,6 +171,7 @@
     }
 
     function render() {
-        playAgain.style.visibility = winner ? 'visible' : 'hidden';
+        playAgain.style.visibility = checkForWin ? 'visible' : 'hidden';
     }
 
+    
