@@ -46,7 +46,7 @@
 
     // Pick a secret word & hold in secretWord
 
-    secretWord = "cutie".toUpperCase();
+    secretWord = "cutie";
 
     // Keydown function -- calls buildGuess, colorGuess, deleteGuess, or throwInvalid
     function checkKeyDown(e) {
@@ -76,22 +76,30 @@
 
     // Create an array with typed letters (not submitted)
     function buildGuess(e){
-        if (userGuess.length === 5) {
-            return
-        };
-        userGuess.push(e.key.toUpperCase())
+
+        userGuess.push(e.key)
         userGuess.forEach((char,idx) => {
             // Display the char in the appropriate HTML element
             let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
             // Place the character in the inner text
-            squareEl.innerHTML = char;
+            squareEl.innerHTML = char.toUpperCase();
         });
     }
-
     // Callback function for click on Guess button / press Enter
     function colorGuess(){
+        // Check guess is 5 letters
+        if (userGuess.length < 5) {
+            console.log("too short")
+            return;
+        }
+
         // Check whether guess is a word
-        spellCheck();
+        if (spellCheck() !== true){
+            outcomeMessage.innerText = "Not a valid word";
+            return;
+        } else {
+            console.log("valid word")
+        }
 
         // For each char, run checkGuess to compare to secretWord
         let results = [];
@@ -117,15 +125,14 @@
 
     function spellCheck() {
         // Check for the userGuess in the DICT
-        // userGuess = "catty"
-        for (letter in DICT) {
-            DICT[letter].forEach((word) => {
-                if (userGuess === word) {
-                    return console.log("Found!");
-                }
-            })    
+        let isWord = userGuess.join("")
+        let dictSearch = DICT[userGuess[0]].some((word) => {
+                console.log(word)
+                console.log(isWord)
+                return isWord === word;
+            }) 
+        return dictSearch;  
         }
-    }
 
     function checkGuess(char, idx) {
         // Check the char against secretWord and return the result (key in the CHECKS constant)
@@ -170,6 +177,10 @@
                 squareEl.style.color = "black";
             }
         }
+
+        // Add logic to remove Win/Loss message
+
+
         // Delete previous guess (the in-mem array)
         clearLastGuess();
         // Reset guessCount
