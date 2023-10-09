@@ -9,8 +9,10 @@
     const DICT  = {
         a: ["apple", "atoms", "antsy"],
         b: ["batty", "backs", "butts"],
-        c: ["catty", "chats", "comma"]
+        c: ["catty", "chats", "comma", "cutie"]
     }
+
+    const defaultMessage = "Type a word then press Enter to guess"
 
 /*----- STATE VARIABLES -----*/
     let secretWord;
@@ -48,7 +50,7 @@
 
     secretWord = "cutie";
 
-    // Keydown function -- calls buildGuess, colorGuess, deleteGuess, or throwInvalid
+    // Keydown function -- calls buildGuess, colorGuess, deleteLetter, or throwInvalid
     function checkKeyDown(e) {
         // Check if input is a letter
         // https://internetdrew.medium.com/how-to-detect-a-letter-key-on-key-events-with-javascript-c749820dcd27
@@ -57,14 +59,14 @@
         } else if (e.key === "Enter") {
             colorGuess();
         } else if (e.key === "Backspace") {
-            deleteGuess();
+            deleteLetter();
         } else {
             return;
         }
     }
 
     // Delete guessed letters (before submit)
-    function deleteGuess(){
+    function deleteLetter(){
         // Get array length (to determine DOM elem to clear)
         let lastLetter = userGuess.length
         // Delete last letter from userGuess
@@ -76,7 +78,6 @@
 
     // Create an array with typed letters (not submitted)
     function buildGuess(e){
-
         userGuess.push(e.key)
         userGuess.forEach((char,idx) => {
             // Display the char in the appropriate HTML element
@@ -85,6 +86,11 @@
             squareEl.innerHTML = char.toUpperCase();
         });
     }
+    // https://www.sitepoint.com/delay-sleep-pause-wait/
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
     // Callback function for click on Guess button / press Enter
     function colorGuess(){
         // Check guess is 5 letters
@@ -96,9 +102,14 @@
         // Check whether guess is a word
         if (spellCheck() !== true){
             outcomeMessage.innerText = "Not a valid word";
+            // Delay 2 seconds, then clear guess and display defaultMessage
+            sleep(2000).then(() => {
+                deleteInnerText(guessCount);
+                outcomeMessage.innerText = defaultMessage;
+            });
             return;
         } else {
-            console.log("valid word")
+            outcomeMessage.innerText = defaultMessage;
         }
 
         // For each char, run checkGuess to compare to secretWord
@@ -127,8 +138,6 @@
         // Check for the userGuess in the DICT
         let isWord = userGuess.join("")
         let dictSearch = DICT[userGuess[0]].some((word) => {
-                console.log(word)
-                console.log(isWord)
                 return isWord === word;
             }) 
         return dictSearch;  
@@ -153,7 +162,6 @@
             outcomeMessage.innerText = "You win!"
             // Render play again
             gameEnd = true;
-            console.log(gameEnd)
             render();
             return true;
          } else if (guessCount === 5) {
@@ -169,17 +177,11 @@
     function reset(e) {
         // Reset every DOM element using loops to reset the HTML elem display
         for (let g = 0; g < guessCount; g++) {
-            for (let i = 4; i > -1; i--){
-                let squareEl = document.querySelector(`#g${g}c${i}`)
-                squareEl.innerHTML = "";
-                squareEl.style.backgroundColor = "white";
-                squareEl.style.borderColor = "rgb(110, 110, 110)";
-                squareEl.style.color = "black";
-            }
+            deleteInnerText(g);
         }
 
         // Add logic to remove Win/Loss message
-
+        outcomeMessage.innerText = defaultMessage;
 
         // Delete previous guess (the in-mem array)
         clearLastGuess();
@@ -194,6 +196,16 @@
     function render() {
         playAgain.style.visibility = gameEnd ? 'visible' : 'hidden';
         gameEnd = false;
+    }
+
+    function deleteInnerText(row) {
+        for (let i = 4; i > -1; i--){
+            let squareEl = document.querySelector(`#g${row}c${i}`)
+            squareEl.innerHTML = "";
+            squareEl.style.backgroundColor = "white";
+            squareEl.style.borderColor = "rgb(110, 110, 110)";
+            squareEl.style.color = "black";
+        }
     }
 
     function clearLastGuess() {
