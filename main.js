@@ -14,24 +14,21 @@
 
 /*----- STATE VARIABLES -----*/
     let secretWord;
-    let board;
-
-    let submitGuess = document.querySelector("#guess")
 
     // Count the number of guesses? Or just do a check of the board's array?
     let guessCount = 0;
 
-    // To return the outcome (win or loss)
-    let outcome;
-
+    // Holds the user's guess until submitted
     let userGuess = [];
+
+    // Variable to control display of Play Again button
+    let gameEnd = false;
 
 /*----- CACHED HTML ELEMENTS -----*/
     const outcomeMessage = document.querySelector("h2");
     const playAgain = document.querySelector("#play-again");
-
-    // Do I need to cache the gameboard?
-
+    // Hide playAgain by default
+    playAgain.style.visibility = 'hidden';
 
 /*----- EVENT LISTENERS -----*/
     // Listener for keydown; calls function to determine appropriate response
@@ -41,7 +38,7 @@
     // For on-screen submission -- update when there's a keyboard
     // submitGuess.addEventListener("click", colorGuess);
 
-    // Listener for playAgain
+    // Listener for playAgain button
     playAgain.addEventListener("click", reset);
 
 
@@ -49,11 +46,7 @@
 
     // Pick a secret word & hold in secretWord
 
-
-    // Test the user's guess
-    // userGuess = "lucky";
-    secretWord = "cutie".toUpperCase()
-
+    secretWord = "cutie".toUpperCase();
 
     // Keydown function -- calls buildGuess, colorGuess, deleteGuess, or throwInvalid
     function checkKeyDown(e) {
@@ -81,6 +74,7 @@
         squareEl.innerHTML = "";
     }
 
+    // Create an array with typed letters (not submitted)
     function buildGuess(e){
         if (userGuess.length === 5) {
             return
@@ -91,11 +85,15 @@
             let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
             // Place the character in the inner text
             squareEl.innerHTML = char;
-    });
+        });
     }
 
-    // Callback function for click on Guess button
+    // Callback function for click on Guess button / press Enter
     function colorGuess(){
+        // Check whether guess is a word
+        spellCheck();
+
+        // For each char, run checkGuess to compare to secretWord
         let results = [];
         userGuess.forEach((char, idx) => {
             results.push(checkGuess(char,idx));
@@ -112,24 +110,33 @@
         checkForWin(winResults);
 
         guessCount++;
-        console.log(guessCount)
 
         // Reset userGuess
         clearLastGuess();
     }
 
-    function checkGuess(char, idx) {
-            // Check the char against secretWord and return the result (key in the CHECKS constant)
-            if(char === secretWord[idx]) {
-                return "inSamePos";
-            }
-            else if (secretWord.includes(char)){   
-                return "inDiffPos";
-            }
-            else{
-                return "notIn";
-            }
+    function spellCheck() {
+        // Check for the userGuess in the DICT
+        // userGuess = "catty"
+        for (letter in DICT) {
+            DICT[letter].forEach((word) => {
+                if (userGuess === word) {
+                    return console.log("Found!");
+                }
+            })    
         }
+    }
+
+    function checkGuess(char, idx) {
+        // Check the char against secretWord and return the result (key in the CHECKS constant)
+        if(char === secretWord[idx]) {
+            return "inSamePos";
+        } else if (secretWord.includes(char)){   
+            return "inDiffPos";
+        } else{
+            return "notIn";
+        }
+    }
     
     function checkForWin() {
          if (winResults) {
@@ -138,11 +145,14 @@
             // Display Winner message
             outcomeMessage.innerText = "You win!"
             // Render play again
+            gameEnd = true;
+            console.log(gameEnd)
             render();
             return true;
          } else if (guessCount === 5) {
             document.removeEventListener("keydown", checkKeyDown);
             outcomeMessage.innerText = "You lost :("
+            gameEnd = true;
             render();
          } else {
             return;
@@ -150,32 +160,29 @@
     }
 
     function reset(e) {
-
-        // Reset every DOM element
-        // Get array length (to determine DOM elem to clear)
-        console.log("Reset")
-        console.log(guessCount)
-        // Remove letters and reset HTML elem display
+        // Reset every DOM element using loops to reset the HTML elem display
         for (let g = 0; g < guessCount; g++) {
-            console.log("guess loop")
             for (let i = 4; i > -1; i--){
-                console.log("idx loop")
                 let squareEl = document.querySelector(`#g${g}c${i}`)
-                console.log(squareEl)
-                squareEl.innerHTML = " ";
+                squareEl.innerHTML = "";
                 squareEl.style.backgroundColor = "white";
                 squareEl.style.borderColor = "rgb(110, 110, 110)";
+                squareEl.style.color = "black";
             }
         }
-        // Delete previous guess (only in-mem array)
+        // Delete previous guess (the in-mem array)
         clearLastGuess();
-
+        // Reset guessCount
+        guessCount = 0;
         // Add back the keydown event listener
-        document.addEventListener("keydown", checkKeyDown)
+
+        console.log(document.addEventListener("keydown", checkKeyDown));
+        render();
     }
 
     function render() {
-        playAgain.style.visibility = checkForWin ? 'visible' : 'hidden';
+        playAgain.style.visibility = gameEnd ? 'visible' : 'hidden';
+        gameEnd = false;
     }
 
     function clearLastGuess() {
