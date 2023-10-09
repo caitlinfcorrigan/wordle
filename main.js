@@ -59,7 +59,6 @@
     function checkKeyDown(e) {
         // Check if input is a letter
         // https://internetdrew.medium.com/how-to-detect-a-letter-key-on-key-events-with-javascript-c749820dcd27
-        console.log(e.key)
         if (e.code === `Key${e.key.toUpperCase()}`){
             buildGuess(e);
         } else if (e.key === "Enter") {
@@ -113,11 +112,10 @@
         checkForWin(winResults);
 
         guessCount++;
+        console.log(guessCount)
 
         // Reset userGuess
-        for (let i = 0; i < 5; i++) {
-            userGuess.pop();
-        }
+        clearLastGuess();
     }
 
     function checkGuess(char, idx) {
@@ -148,30 +146,41 @@
             render();
          } else {
             return;
-            
-            // Display loss message
-            // Let player play again
-
-         }
+        }
     }
 
-    function reset(guessCount) {
-        // Add back the keydown event listener
-        document.addEventListener("keydown", checkKeyDown)
-        // Reset every DOM element and delete previous guess (only in-mem array)
+    function reset(e) {
+
+        // Reset every DOM element
         // Get array length (to determine DOM elem to clear)
         console.log("Reset")
-        for (let g = guessCount; g > -1; g--) {
+        console.log(guessCount)
+        // Remove letters and reset HTML elem display
+        for (let g = 0; g < guessCount; g++) {
+            console.log("guess loop")
             for (let i = 4; i > -1; i--){
-                let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
-                squareEl.innerHTML = "";
+                console.log("idx loop")
+                let squareEl = document.querySelector(`#g${g}c${i}`)
+                console.log(squareEl)
+                squareEl.innerHTML = " ";
+                squareEl.style.backgroundColor = "white";
+                squareEl.style.borderColor = "rgb(110, 110, 110)";
             }
         }
+        // Delete previous guess (only in-mem array)
+        clearLastGuess();
 
+        // Add back the keydown event listener
+        document.addEventListener("keydown", checkKeyDown)
     }
 
     function render() {
         playAgain.style.visibility = checkForWin ? 'visible' : 'hidden';
     }
 
+    function clearLastGuess() {
+        for (let i = 0; i < 5; i++) {
+            userGuess.pop();
+        }
+    }
     
