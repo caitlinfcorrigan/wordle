@@ -6,11 +6,11 @@
     }
 
     // Mini dictionary for testing
-    const DICT  = {
-        a: ["apple", "atoms", "antsy"],
-        b: ["batty", "backs", "butts"],
-        c: ["catty", "chats", "comma", "cutie"]
-    }
+    // const DICT  = {
+    //     a: ["apple", "atoms", "antsy"],
+    //     b: ["batty", "backs", "butts"],
+    //     c: ["catty", "chats", "comma", "cutie"]
+    // }
 
     // https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
 
@@ -58,7 +58,10 @@
 
     // Import dictionary
     // let freeDict = https://www.thefreedictionary.com/5-letter-words-2.htm
+    import DICT from "./miniDict.json" assert { type: "json" };
+    //let DICT = data();
 
+    // console.log(DICT.a[0])
 
 
     // Pick a secret word & hold in secretWord
