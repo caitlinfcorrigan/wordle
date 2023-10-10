@@ -5,12 +5,20 @@
         inSamePos: "rgb(50, 155, 80)",
     }
 
-    // Mini dictionary for testing
+    Mini dictionary for testing
     const DICT  = {
         a: ["apple", "atoms", "antsy"],
         b: ["batty", "backs", "butts"],
         c: ["catty", "chats", "comma", "cutie"]
     }
+
+    // let DICT = {
+    //     a: [],
+    //     b: [],
+    //     c: [],
+    //     d: [],
+    //     e: []
+    // }
 
     const defaultMessage = "Type a word then press Enter to guess"
 
@@ -28,9 +36,9 @@
 
 /*----- CACHED HTML ELEMENTS -----*/
     const outcomeMessage = document.querySelector("h2");
-    const playAgain = document.querySelector("#play-again");
+    const playAgainBtn = document.querySelector("#play-again");
     // Hide playAgain by default
-    playAgain.style.visibility = 'hidden';
+    playAgainBtn.style.visibility = 'hidden';
 
 /*----- EVENT LISTENERS -----*/
     // Listener for keydown; calls function to determine appropriate response
@@ -41,14 +49,25 @@
     // submitGuess.addEventListener("click", colorGuess);
 
     // Listener for playAgain button
-    playAgain.addEventListener("click", reset);
+    playAgainBtn.addEventListener("click", reset);
 
 
 /*----- FUNCTIONS -----*/
 
-    // Pick a secret word & hold in secretWord
+    // Import dictionary
+    // let freeDict = https://www.thefreedictionary.com/5-letter-words-2.htm
 
+
+
+    // Pick a secret word & hold in secretWord
+    // Pick a random number 0-25, then random number between 0 & length of array
     secretWord = "cutie";
+
+    // Wait function for temporary message displays
+    // https://www.sitepoint.com/delay-sleep-pause-wait/
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     // Keydown function -- calls buildGuess, colorGuess, deleteLetter, or throwInvalid
     function checkKeyDown(e) {
@@ -86,16 +105,15 @@
             squareEl.innerHTML = char.toUpperCase();
         });
     }
-    // https://www.sitepoint.com/delay-sleep-pause-wait/
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-        }
 
     // Callback function for click on Guess button / press Enter
     function colorGuess(){
         // Check guess is 5 letters
         if (userGuess.length < 5) {
-            console.log("too short")
+            outcomeMessage.innerText = "Too short!";
+            sleep(1500).then(() => {
+                outcomeMessage.innerText = defaultMessage;
+            });
             return;
         }
 
@@ -103,14 +121,16 @@
         if (spellCheck() !== true){
             outcomeMessage.innerText = "Not a valid word";
             // Delay 2 seconds, then clear guess and display defaultMessage
-            sleep(2000).then(() => {
+            sleep(1500).then(() => {
                 deleteInnerText(guessCount);
                 outcomeMessage.innerText = defaultMessage;
+                clearLastGuess();
             });
             return;
-        } else {
-            outcomeMessage.innerText = defaultMessage;
-        }
+        } 
+        // else {
+        //     outcomeMessage.innerText = defaultMessage;
+        // }
 
         // For each char, run checkGuess to compare to secretWord
         let results = [];
@@ -160,15 +180,15 @@
             document.removeEventListener("keydown", checkKeyDown);
             // Display Winner message
             outcomeMessage.innerText = "You win!"
-            // Render play again
+            // Display play again button
             gameEnd = true;
-            render();
+            playAgain();
             return true;
          } else if (guessCount === 5) {
             document.removeEventListener("keydown", checkKeyDown);
             outcomeMessage.innerText = "You lost :("
             gameEnd = true;
-            render();
+            playAgain();
          } else {
             return;
         }
@@ -180,7 +200,7 @@
             deleteInnerText(g);
         }
 
-        // Add logic to remove Win/Loss message
+        // Remove Win/Loss message
         outcomeMessage.innerText = defaultMessage;
 
         // Delete previous guess (the in-mem array)
@@ -188,13 +208,12 @@
         // Reset guessCount
         guessCount = 0;
         // Add back the keydown event listener
-
         console.log(document.addEventListener("keydown", checkKeyDown));
-        render();
+        playAgain();
     }
 
-    function render() {
-        playAgain.style.visibility = gameEnd ? 'visible' : 'hidden';
+    function playAgain() {
+        playAgainBtn.style.visibility = gameEnd ? 'visible' : 'hidden';
         gameEnd = false;
     }
 
