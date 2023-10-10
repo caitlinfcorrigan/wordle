@@ -5,12 +5,14 @@
         inSamePos: "rgb(50, 155, 80)",
     }
 
-    Mini dictionary for testing
+    // Mini dictionary for testing
     const DICT  = {
         a: ["apple", "atoms", "antsy"],
         b: ["batty", "backs", "butts"],
         c: ["catty", "chats", "comma", "cutie"]
     }
+
+    // https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
 
     // let DICT = {
     //     a: [],
@@ -61,7 +63,21 @@
 
     // Pick a secret word & hold in secretWord
     // Pick a random number 0-25, then random number between 0 & length of array
-    secretWord = "cutie";
+    function getSecretWord() {
+        // https://www.programiz.com/javascript/examples/generate-random-strings
+        // Do I generate a random number 1-26 and have a lookup array?
+        // Current implementation generates random number occassionally
+        let charIdx = Math.random().toString(36).substring(2,3);
+        console.log(charIdx);
+        let wordIdx = Math.floor(Math.random() * 3);
+        console.log(wordIdx)
+        // Update "a" to [charIdx] when there is a complete dictionary to reference
+        secretWord = DICT.a[wordIdx];
+        console.log(secretWord);
+    }
+
+
+    //secretWord = "cutie";
 
     // Wait function for temporary message displays
     // https://www.sitepoint.com/delay-sleep-pause-wait/
