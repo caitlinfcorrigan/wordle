@@ -58,7 +58,7 @@
 
     // Import dictionary
     // let freeDict = https://www.thefreedictionary.com/5-letter-words-2.htm
-    import DICT from "./miniDict.json" assert { type: "json" };
+    import DICT from "./dictFull.json" assert { type: "json" };
     //let DICT = data();
 
     // console.log(DICT.a[0])
@@ -80,7 +80,7 @@
     }
 
 
-    //secretWord = "cutie";
+    secretWord = "cutie";
 
     // Wait function for temporary message displays
     // https://www.sitepoint.com/delay-sleep-pause-wait/
@@ -164,7 +164,7 @@
         })
         // Check for win
         let winningLetters = (currChar) => currChar === "inSamePos";        
-        winResults = results.every(winningLetters);
+        let winResults = results.every(winningLetters);
         checkForWin(winResults);
 
         guessCount++;
@@ -183,6 +183,7 @@
         }
 
     function checkGuess(char, idx) {
+        console.log(char, idx)
         // Check the char against secretWord and return the result (key in the CHECKS constant)
         if(char === secretWord[idx]) {
             return "inSamePos";
@@ -193,7 +194,7 @@
         }
     }
     
-    function checkForWin() {
+    function checkForWin(winResults) {
          if (winResults) {
             // Remove the event listener -- stop accepting key input
             document.removeEventListener("keydown", checkKeyDown);
@@ -227,7 +228,7 @@
         // Reset guessCount
         guessCount = 0;
         // Add back the keydown event listener
-        console.log(document.addEventListener("keydown", checkKeyDown));
+        document.addEventListener("keydown", checkKeyDown);
         playAgain();
     }
 
