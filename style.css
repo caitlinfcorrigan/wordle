@@ -1,6 +1,6 @@
 * {
     box-sizing: border-box;
-    
+
 }
 
 body {
@@ -34,7 +34,7 @@ h2 {
     gap: .75vmin;
     text-align: center;
     font-size: 6vmin;
-    border: solid rgb(110, 110, 110) .5vmin; 
+    border: solid rgb(110, 115, 115) .5vmin; 
 }
 
 button {
