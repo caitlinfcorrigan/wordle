@@ -1,9 +1,12 @@
 /*----- CONSTANTS -----*/
     const CHECKS = {
-        notIn: "rgb(110, 110, 110)",
-        inDiffPos: "rgb(250, 175, 45)",
-        inSamePos: "rgb(50, 155, 80)",
+        notIn: "rgb(110, 115, 115)",
+        inDiffPos: "rgb(200, 180, 50)",
+        inSamePos: "rgb(120, 170, 110)"
     }
+
+    // For generating the secretWord
+    const LETTERS = "abcdefghijklmnopqrstuvwxyz";
 
     // Mini dictionary for testing
     // const DICT  = {
@@ -12,15 +15,8 @@
     //     c: ["catty", "chats", "comma", "cutie"]
     // }
 
-    // https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
-
-    // let DICT = {
-    //     a: [],
-    //     b: [],
-    //     c: [],
-    //     d: [],
-    //     e: []
-    // }
+    // Using word list from https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
+    import DICT from "./dictFull.json" assert { type: "json" };
 
     const defaultMessage = "Type a word then press Enter to guess"
 
@@ -46,7 +42,6 @@
     // Listener for keydown; calls function to determine appropriate response
     document.addEventListener("keydown", checkKeyDown)
 
-
     // For on-screen submission -- update when there's a keyboard
     // submitGuess.addEventListener("click", colorGuess);
 
@@ -56,31 +51,28 @@
 
 /*----- FUNCTIONS -----*/
 
-    // Import dictionary
-    // let freeDict = https://www.thefreedictionary.com/5-letter-words-2.htm
-    import DICT from "./dictFull.json" assert { type: "json" };
-    //let DICT = data();
+    secretWord = "cutie";
 
-    // console.log(DICT.a[0])
-
+    getSecretWord();
 
     // Pick a secret word & hold in secretWord
     // Pick a random number 0-25, then random number between 0 & length of array
     function getSecretWord() {
         // https://www.programiz.com/javascript/examples/generate-random-strings
-        // Do I generate a random number 1-26 and have a lookup array?
-        // Current implementation generates random number occassionally
-        let charIdx = Math.random().toString(36).substring(2,3);
-        console.log(charIdx);
-        let wordIdx = Math.floor(Math.random() * 3);
+        // Generate random number 0-26, then lookup in the LETTERS string
+        let charIdx = Math.floor(Math.random() * (26 - 0) + 0);
+        console.log(charIdx)
+        let char = LETTERS[charIdx]
+        console.log(char);
+        let length = DICT[char].length
+        let wordIdx = Math.floor(Math.random() * length);
         console.log(wordIdx)
         // Update "a" to [charIdx] when there is a complete dictionary to reference
-        secretWord = DICT.a[wordIdx];
+        secretWord = DICT[char][wordIdx];
         console.log(secretWord);
     }
 
 
-    secretWord = "cutie";
 
     // Wait function for temporary message displays
     // https://www.sitepoint.com/delay-sleep-pause-wait/
