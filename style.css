@@ -58,16 +58,17 @@ button {
     grid-template-rows: repeat(6, 10vmin); */
 
 
-    align-items: center;
+    /* align-items: center; */
 
     gap: .75vmin;
     justify-self: center;
-    align-self: center;
+    /* align-self: center; */
 }
 
 /* How to vertically align the context? */
 .keyboard > div {
     /* gap: .75vmin; */
+    align-items: center;
     text-align: center;
     font-size: 6vmin;
     border: solid rgb(110, 115, 115) .5vmin; 
