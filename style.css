@@ -6,7 +6,7 @@
 body {
     font-family: 'Rajdhani', sans-serif;
     height: 10vh;
-    margin: 0;
+    /* margin: 0; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -43,8 +43,6 @@ h2 {
 }
 
 button {
-    margin: 0;
-    /* place-self: center; */
     font-family: 'Rajdhani', sans-serif;
 }
 
@@ -53,23 +51,21 @@ button {
 }
 
 .keyboard {
-
-    /* grid-template-columns: repeat(5, 10vmin);
-    grid-template-rows: repeat(6, 10vmin); */
-
-
-    /* align-items: center; */
-
-    gap: .75vmin;
-    justify-self: center;
-    /* align-self: center; */
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-/* How to vertically align the context? */
-.keyboard > div {
-    /* gap: .75vmin; */
-    align-items: center;
-    text-align: center;
-    font-size: 6vmin;
-    border: solid rgb(110, 115, 115) .5vmin; 
+
+.keyboard > button {
+    font-size: 4vh;
+    justify-content: center;
+    min-width: 7vw;
+    max-width: 10vw;
+    min-height: 7vw;
+    max-height: 10vw;
+    margin: 3px;
+    font-size: 3vh;
+    border: solid rgb(110, 115, 115) 2px;
+    border-radius: 15%;
 }
