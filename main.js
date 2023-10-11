@@ -42,13 +42,23 @@
     const delBtn = document.querySelector("#del");
     const enterBtn = document.querySelector("#enter")
 
+    //Letter buttons
+    let topRow = document.getElementById("top-row");
+    let homeRow = document.getElementById("home-row")
+    let btmRow = document.getElementById("bottom-row")
+    console.log(topRow)
+    topRow.addEventListener("click", letterClick)
+
 /*----- EVENT LISTENERS -----*/
     // Listener for keydown; calls function to determine appropriate response
-    document.addEventListener("keydown", checkKeyDown)
+    //document.addEventListener("keydown", letterClick)
 
     // For on-screen submission -- update when there's a keyboard
     delBtn.addEventListener("click", deleteLetter);
     enterBtn.addEventListener("click", submitGuess);
+    topRow.addEventListener("click", letterClick)
+    homeRow.addEventListener("click", letterClick)
+    btmRow.addEventListener("click", letterClick)
 
     // Listener for playAgain button
     playAgainBtn.addEventListener("click", reset);
@@ -72,6 +82,13 @@
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+
+    function letterClick (e){
+        console.log(e.srcElement.innerText)
+        // buildGuess(e.srcElement.innerText)
+        buildGuess(e.srcElement.innerText)
+    }
+
 
     // Keydown function -- calls buildGuess, submitGuess, deleteLetter, or throwInvalid
     function checkKeyDown(e) {
