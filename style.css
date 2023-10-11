@@ -7,24 +7,28 @@ body {
     font-family: 'Rajdhani', sans-serif;
     height: 10vh;
     margin: 0;
-    display: grid;
-    /* justify-content: center; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 h1 {
     font-size: 6vmin;
-    justify-self: center;
+    justify-content: center;
+
+    margin: 0;
 }
 
 h2 {
     font-size: 4vmin;
     justify-self: center;
+    margin-top: 1vh;
 }
 
 .game-grid {
     display: grid;
-    grid-template-columns: repeat(5, 10vmin);
-    grid-template-rows: repeat(6, 10vmin);
+    grid-template-columns: repeat(5, 8vmin);
+    grid-template-rows: repeat(6, 8vmin);
     gap: .75vmin;
     justify-self: center;
     align-items: stretch;
@@ -32,15 +36,15 @@ h2 {
 
 /* How to vertically align the context? */
 .game-grid > div {
-    /* gap: .75vmin; */
+    gap: .75vmin;
     text-align: center;
     font-size: 6vmin;
     border: solid rgb(110, 115, 115) .5vmin; 
 }
 
 button {
-    margin: 3vmin;
-    place-self: center;
+    margin: 0;
+    /* place-self: center; */
     font-family: 'Rajdhani', sans-serif;
 }
 
@@ -49,17 +53,21 @@ button {
 }
 
 .keyboard {
-    /* display: flex; */
+
     /* grid-template-columns: repeat(5, 10vmin);
     grid-template-rows: repeat(6, 10vmin); */
+
+
+    align-items: center;
+
     gap: .75vmin;
     justify-self: center;
-    align-self: stretch;
+    align-self: center;
 }
 
 /* How to vertically align the context? */
 .keyboard > div {
-    gap: .75vmin;
+    /* gap: .75vmin; */
     text-align: center;
     font-size: 6vmin;
     border: solid rgb(110, 115, 115) .5vmin; 
