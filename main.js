@@ -19,6 +19,8 @@
     import DICT from "./dictFull.json" assert { type: "json" };
 
     const defaultMessage = "Type a word then press Enter to guess"
+    const winMessage = "You smart cookie! You won!"
+    const lossMessage = "Maybe next time."
 
 /*----- STATE VARIABLES -----*/
     let secretWord;
@@ -43,7 +45,7 @@
     document.addEventListener("keydown", checkKeyDown)
 
     // For on-screen submission -- update when there's a keyboard
-    // submitGuess.addEventListener("click", colorGuess);
+    // submitGuess.addEventListener("click", submitGuess);
 
     // Listener for playAgain button
     playAgainBtn.addEventListener("click", reset);
@@ -51,28 +53,16 @@
 
 /*----- FUNCTIONS -----*/
 
-    secretWord = "cutie";
-
-    getSecretWord();
-
-    // Pick a secret word & hold in secretWord
-    // Pick a random number 0-25, then random number between 0 & length of array
     function getSecretWord() {
-        // https://www.programiz.com/javascript/examples/generate-random-strings
         // Generate random number 0-26, then lookup in the LETTERS string
         let charIdx = Math.floor(Math.random() * (26 - 0) + 0);
-        console.log(charIdx)
         let char = LETTERS[charIdx]
-        console.log(char);
+        // Get the length of that char's array, then choose a random index in it
         let length = DICT[char].length
         let wordIdx = Math.floor(Math.random() * length);
-        console.log(wordIdx)
-        // Update "a" to [charIdx] when there is a complete dictionary to reference
         secretWord = DICT[char][wordIdx];
         console.log(secretWord);
     }
-
-
 
     // Wait function for temporary message displays
     // https://www.sitepoint.com/delay-sleep-pause-wait/
@@ -80,14 +70,14 @@
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    // Keydown function -- calls buildGuess, colorGuess, deleteLetter, or throwInvalid
+    // Keydown function -- calls buildGuess, submitGuess, deleteLetter, or throwInvalid
     function checkKeyDown(e) {
         // Check if input is a letter
         // https://internetdrew.medium.com/how-to-detect-a-letter-key-on-key-events-with-javascript-c749820dcd27
         if (e.code === `Key${e.key.toUpperCase()}`){
             buildGuess(e);
         } else if (e.key === "Enter") {
-            colorGuess();
+            submitGuess();
         } else if (e.key === "Backspace") {
             deleteLetter();
         } else {
@@ -106,7 +96,8 @@
         squareEl.innerHTML = "";
     }
 
-    // Create an array with typed letters (not submitted)
+    // Create an array with typed letters (hold in-memory until user submits guess)
+    // Display letters as user types
     function buildGuess(e){
         userGuess.push(e.key)
         userGuess.forEach((char,idx) => {
@@ -118,7 +109,7 @@
     }
 
     // Callback function for click on Guess button / press Enter
-    function colorGuess(){
+    function submitGuess(){
         // Check guess is 5 letters
         if (userGuess.length < 5) {
             outcomeMessage.innerText = "Too short!";
@@ -135,13 +126,10 @@
             sleep(1500).then(() => {
                 deleteInnerText(guessCount);
                 outcomeMessage.innerText = defaultMessage;
-                clearLastGuess();
+                clearUserGuess();
             });
             return;
         } 
-        // else {
-        //     outcomeMessage.innerText = defaultMessage;
-        // }
 
         // For each char, run checkGuess to compare to secretWord
         let results = [];
@@ -154,15 +142,17 @@
             squareEl.style.borderColor = CHECKS[result];
             squareEl.style.color = "white";
         })
-        // Check for win
-        let winningLetters = (currChar) => currChar === "inSamePos";        
+
+        // Check for win:
+        // Create the callback function for the every method
+        let winningLetters = (currChar) => currChar === "inSamePos"; 
+        // If every element in results array is "inSamePos", return true       
         let winResults = results.every(winningLetters);
         checkForWin(winResults);
 
+        // If the game isn't over, increment guessCount and clear the userGuess array
         guessCount++;
-
-        // Reset userGuess
-        clearLastGuess();
+        clearUserGuess();
     }
 
     function spellCheck() {
@@ -170,8 +160,8 @@
         let isWord = userGuess.join("")
         let dictSearch = DICT[userGuess[0]].some((word) => {
                 return isWord === word;
-            }) 
-        return dictSearch;  
+            })
+        return dictSearch;
         }
 
     function checkGuess(char, idx) {
@@ -191,14 +181,14 @@
             // Remove the event listener -- stop accepting key input
             document.removeEventListener("keydown", checkKeyDown);
             // Display Winner message
-            outcomeMessage.innerText = "You win!"
+            outcomeMessage.innerText = winMessage
             // Display play again button
             gameEnd = true;
             playAgain();
             return true;
          } else if (guessCount === 5) {
             document.removeEventListener("keydown", checkKeyDown);
-            outcomeMessage.innerText = "You lost :("
+            outcomeMessage.innerText = lossMessage
             gameEnd = true;
             playAgain();
          } else {
@@ -207,20 +197,19 @@
     }
 
     function reset(e) {
-        // Reset every DOM element using loops to reset the HTML elem display
+        // Reset every row of DOM element using loops and the deleteInnerText function
         for (let g = 0; g < guessCount; g++) {
             deleteInnerText(g);
         }
-
-        // Remove Win/Loss message
+        // Clear Win/Loss message and display default
         outcomeMessage.innerText = defaultMessage;
-
-        // Delete previous guess (the in-mem array)
-        clearLastGuess();
-        // Reset guessCount
+        // Delete the current guess from the userGuess array
+        clearUserGuess();
+        // Reset guessCount to 0
         guessCount = 0;
         // Add back the keydown event listener
         document.addEventListener("keydown", checkKeyDown);
+        // Hide the Play Again button
         playAgain();
     }
 
@@ -239,9 +228,10 @@
         }
     }
 
-    function clearLastGuess() {
+    function clearUserGuess() {
         for (let i = 0; i < 5; i++) {
             userGuess.pop();
         }
     }
     
+getSecretWord();
