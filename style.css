@@ -8,7 +8,8 @@ body {
     height: 10vh;
     margin: 0;
     display: grid;
-    justify-content: center;}
+    /* justify-content: center; */
+}
 
 h1 {
     font-size: 6vmin;
@@ -26,12 +27,12 @@ h2 {
     grid-template-rows: repeat(6, 10vmin);
     gap: .75vmin;
     justify-self: center;
-    align-self: stretch;
+    align-items: stretch;
 }
 
 /* How to vertically align the context? */
 .game-grid > div {
-    gap: .75vmin;
+    /* gap: .75vmin; */
     text-align: center;
     font-size: 6vmin;
     border: solid rgb(110, 115, 115) .5vmin; 
@@ -41,4 +42,25 @@ button {
     margin: 3vmin;
     place-self: center;
     font-family: 'Rajdhani', sans-serif;
+}
+
+#play-again {
+    margin: 1vh;
+}
+
+.keyboard {
+    /* display: flex; */
+    /* grid-template-columns: repeat(5, 10vmin);
+    grid-template-rows: repeat(6, 10vmin); */
+    gap: .75vmin;
+    justify-self: center;
+    align-self: stretch;
+}
+
+/* How to vertically align the context? */
+.keyboard > div {
+    gap: .75vmin;
+    text-align: center;
+    font-size: 6vmin;
+    border: solid rgb(110, 115, 115) .5vmin; 
 }
