@@ -39,13 +39,16 @@
     const playAgainBtn = document.querySelector("#play-again");
     // Hide playAgain by default
     playAgainBtn.style.visibility = 'hidden';
+    const delBtn = document.querySelector("#del");
+    const enterBtn = document.querySelector("#enter")
 
 /*----- EVENT LISTENERS -----*/
     // Listener for keydown; calls function to determine appropriate response
     document.addEventListener("keydown", checkKeyDown)
 
     // For on-screen submission -- update when there's a keyboard
-    // submitGuess.addEventListener("click", submitGuess);
+    delBtn.addEventListener("click", deleteLetter);
+    enterBtn.addEventListener("click", submitGuess);
 
     // Listener for playAgain button
     playAgainBtn.addEventListener("click", reset);
@@ -165,7 +168,6 @@
         }
 
     function checkGuess(char, idx) {
-        console.log(char, idx)
         // Check the char against secretWord and return the result (key in the CHECKS constant)
         if(char === secretWord[idx]) {
             return "inSamePos";
