@@ -9,6 +9,10 @@ The game ends when the user guesses the word or loses by playing 6 incorrect gue
 
 Unlike the New York Times' version, users can choose to play again with a new secret word, rather than waiting until the next day.
 
+## Play the Game!
+
+Click [me](https://github.com/caitlinfcorrigan/wordle)!
+
 
 ## Technologies Used
 HTML, CSS, JavaScript, DOM
