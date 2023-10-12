@@ -36,6 +36,11 @@
     // Variable to control display of Play Again button
     let gameEnd = false;
 
+    // Keyboard guess arrays
+    let notIn = [];
+    let diffPos = [];
+    let samePos = [];
+
 /*----- CACHED HTML ELEMENTS -----*/
     
     const outcomeMessage = document.querySelector("h2");
@@ -45,40 +50,23 @@
 
 
     //On-screen buttons
-
-    let topRow = document.getElementById("top-row");
-    let homeRow = document.getElementById("home-row")
-    let btmRow = document.getElementById("bottom-row")
     const delBtn = document.querySelector("#del");
     const enterBtn = document.querySelector("#enter")
-
+    const letterBtns = document.querySelectorAll(".letter");
 
 /*----- EVENT LISTENERS -----*/
     // Listener for keydown; calls function to determine appropriate response
     document.addEventListener("keydown", checkKeyDown)
 
-    // For on-screen submission -- update when there's a keyboard
+    // Listeners for on-screen Del and Enter buttons
     delBtn.addEventListener("click", deleteLetter);
     enterBtn.addEventListener("click", submitGuess);
 
-    let letterBtns = document.querySelectorAll(".letter");
-    console.log(letterBtns)
+    // Add listeners to every letter button
     letterBtns.forEach((el) => {
         console.log(el)
         el.addEventListener("click", letterClick)
     })
-    // for (let letter in letterBtns){
-    //     console.log(letter)
-
-    //     letter.addEventListener("click", letterClick)
-
-    // }
-
-    // Adding listeners to the buttons via the parent element allows user to guess the parent element if they click between letters
-    // topRow.addEventListener("click", letterClick)
-    // homeRow.addEventListener("click", letterClick)
-    // btmRow.addEventListener("click", letterClick)
-
 
     // Listener for playAgain button
     playAgainBtn.addEventListener("click", reset);
@@ -163,7 +151,6 @@
             });
             return;
         }
-
         // Check whether guess is a word
         if (spellCheck() !== true){
             outcomeMessage.innerText = invalidWord;
@@ -175,18 +162,19 @@
             });
             return;
         } 
-
         // For each char, run checkGuess to compare to secretWord
         let results = [];
         userGuess.forEach((char, idx) => {
             results.push(checkGuess(char,idx));
         })
+        // Apply conditional colors HTML elements using indexed values in results array
         results.forEach((result,idx) => {
             let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
             squareEl.style.backgroundColor = CHECKS[result];
             squareEl.style.borderColor = CHECKS[result];
             squareEl.style.color = "white";
         })
+        // Run keyColor function
 
         // Check for win:
         // Create the callback function for the every method
@@ -200,6 +188,13 @@
         clearUserGuess();
     }
 
+    function keyColor() {
+        // If user guesses letter and not in word -> gray
+        // Create an array of incorrect guesses
+        // Create an array of correct guesses
+        // Create an array of diffPos guess -> splice when the pos is correct
+    }
+
     function spellCheck() {
         // Check for the userGuess in the DICT
         let isWord = userGuess.join("")
@@ -208,6 +203,7 @@
         return dictSearch;
         }
 
+    // What if it returned an object of char: result
     function checkGuess(char, idx) {
         // Check the char against secretWord and return the result (key in the CHECKS constant)
         if(char === secretWord[idx]) {
@@ -247,7 +243,15 @@
         // Clear Win/Loss message and display default
         outcomeMessage.innerText = defaultMessage;
         // Delete the current guess from the userGuess array
-        clearUserGuess();
+        // clearUserGuess();
+
+        // Clear all arrays
+        clearArrays(userGuess)
+        clearArrays(notIn)
+        clearArrays(diffPos)
+        clearArrays(samePos)
+
+
         // Reset guessCount to 0
         guessCount = 0;
         // Add back the keydown event listener
@@ -270,10 +274,10 @@
             squareEl.style.color = "black";
         }
     }
-
-    function clearUserGuess() {
-        for (let i = 0; i < 5; i++) {
-            userGuess.pop();
+    // Can this clear the keyboard arrays as well? Originally clearUserGuess with no param-- hardcoded to clear the one array
+    function clearArrays(arrayToClear) {
+        for (let i = 0; i < arrayToClear.length; i++) {
+            arrayToClear.pop();
         }
     }
     
