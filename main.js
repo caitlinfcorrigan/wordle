@@ -18,11 +18,11 @@
     // Using word list from https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
     import DICT from "./dictFull.json" assert { type: "json" };
 
-    const defaultMessage = "Type a word then press Enter to guess"
-    const winMessage = "You smart cookie! You won!"
-    const lossMessage = "Maybe next time."
-    const invalidWord = "Not a valid word."
-    const tooShort = "Your guess is too short."
+    const defaultMessage = "Type a word then press Enter to guess";
+    const winMessage = "You smart cookie! You won!";
+    const lossMessage = "Maybe next time.";
+    const invalidWord = "Not a valid word.";
+    const tooShort = "Your guess is too short.";
 
 /*----- STATE VARIABLES -----*/
     let secretWord;
@@ -64,7 +64,6 @@
 
     // Add listeners to every letter button
     letterBtns.forEach((el) => {
-        console.log(el)
         el.addEventListener("click", letterClick)
     })
 
@@ -158,7 +157,7 @@
             sleep(1500).then(() => {
                 deleteInnerText(guessCount);
                 outcomeMessage.innerText = defaultMessage;
-                clearUserGuess();
+                clearArrays(userGuess);
             });
             return;
         } 
@@ -174,26 +173,48 @@
             squareEl.style.borderColor = CHECKS[result];
             squareEl.style.color = "white";
         })
-        // Run keyColor function
+        keyColor();
 
         // Check for win:
-        // Create the callback function for the every method
-        let winningLetters = (currChar) => currChar === "inSamePos"; 
         // If every element in results array is "inSamePos", return true       
-        let winResults = results.every(winningLetters);
+        let winResults = results.every((result) => result === "inSamePos");
         checkForWin(winResults);
 
         // If the game isn't over, increment guessCount and clear the userGuess array
         guessCount++;
-        clearUserGuess();
+        clearArrays(userGuess);
     }
 
     function keyColor() {
-        // If user guesses letter and not in word -> gray
+        // Compare every key button to notIn array
+        letterBtns.forEach((el) => {
+            if (samePos.includes(el.id)) {
+                console.log(el.id)
+                el.style.backgroundColor = CHECKS.inSamePos;
+                el.style.borderColor = CHECKS.inSamePos;
+                el.style.color = "white";
+                return;
+            } else if (diffPos.includes(el.id)) {
+                el.style.backgroundColor = CHECKS.inDiffPos;
+                el.style.borderColor = CHECKS.inDiffPos;
+                el.style.color = "white";
+                return;
+            } else if (notIn.includes(el.id)) {
+                el.style.backgroundColor = CHECKS.notIn;
+                el.style.borderColor = CHECKS.notIn;
+                el.style.color = "white";
+                return;
+            }
+
+
+        })
+    }
+
+
+            // If user guesses letter and not in word -> gray
         // Create an array of incorrect guesses
         // Create an array of correct guesses
         // Create an array of diffPos guess -> splice when the pos is correct
-    }
 
     function spellCheck() {
         // Check for the userGuess in the DICT
@@ -207,13 +228,41 @@
     function checkGuess(char, idx) {
         // Check the char against secretWord and return the result (key in the CHECKS constant)
         if(char === secretWord[idx]) {
+            // Try adding to samePos array
+            checkArray(samePos, char);
+            // Check if in diffPos array and remove if it is
+            if (diffPos.includes(char)) {
+                // Get char's index in diffPos
+                let index = diffPos.indexOf(char)
+                // Splice char's index from diffPos
+                diffPos.splice(index, 1)
+            }
             return "inSamePos";
-        } else if (secretWord.includes(char)){   
+        } else if (secretWord.includes(char)){
+            // Check if letter is green
+            if (samePos.includes(char)) {
+                return true;
+            } else { // Otherwise, try adding to diffPos array
+                checkArray(diffPos, char);
+            }
             return "inDiffPos";
         } else{
+            checkArray(notIn, char)
             return "notIn";
         }
     }
+
+// If guess contains the same letter twice, but secretWord only contains it once, the second occurance isn't handled
+
+    function checkArray(arrayName, char) {
+        if (arrayName.includes(char)) {
+            return true;
+        } else {
+            arrayName.push(char)
+            return false;
+        }
+    }
+
     
     function checkForWin(winResults) {
          if (winResults) {
@@ -243,7 +292,14 @@
         // Clear Win/Loss message and display default
         outcomeMessage.innerText = defaultMessage;
         // Delete the current guess from the userGuess array
-        // clearUserGuess();
+        // clearArrays(userGuess);
+
+        // Reset keyboard
+        letterBtns.forEach((el) => {
+            el.style.backgroundColor = "rgb(239,239,239)";
+            el.style.borderColor = "rgb(110, 115, 115)";
+            el.style.color = "black";
+        })
 
         // Clear all arrays
         clearArrays(userGuess)
@@ -276,7 +332,7 @@
     }
     // Can this clear the keyboard arrays as well? Originally clearUserGuess with no param-- hardcoded to clear the one array
     function clearArrays(arrayToClear) {
-        for (let i = 0; i < arrayToClear.length; i++) {
+        while (arrayToClear.length > 0) {
             arrayToClear.pop();
         }
     }
