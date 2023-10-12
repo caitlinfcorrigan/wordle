@@ -21,6 +21,8 @@
     const defaultMessage = "Type a word then press Enter to guess"
     const winMessage = "You smart cookie! You won!"
     const lossMessage = "Maybe next time."
+    const invalidWord = "Not a valid word."
+    const tooShort = "Your guess is too short."
 
 /*----- STATE VARIABLES -----*/
     let secretWord;
@@ -35,30 +37,48 @@
     let gameEnd = false;
 
 /*----- CACHED HTML ELEMENTS -----*/
+    
     const outcomeMessage = document.querySelector("h2");
     const playAgainBtn = document.querySelector("#play-again");
     // Hide playAgain by default
     playAgainBtn.style.visibility = 'hidden';
-    const delBtn = document.querySelector("#del");
-    const enterBtn = document.querySelector("#enter")
 
-    //Letter buttons
+
+    //On-screen buttons
+
     let topRow = document.getElementById("top-row");
     let homeRow = document.getElementById("home-row")
     let btmRow = document.getElementById("bottom-row")
-    console.log(topRow)
-    topRow.addEventListener("click", letterClick)
+    const delBtn = document.querySelector("#del");
+    const enterBtn = document.querySelector("#enter")
+
 
 /*----- EVENT LISTENERS -----*/
     // Listener for keydown; calls function to determine appropriate response
-    //document.addEventListener("keydown", letterClick)
+    document.addEventListener("keydown", checkKeyDown)
 
     // For on-screen submission -- update when there's a keyboard
     delBtn.addEventListener("click", deleteLetter);
     enterBtn.addEventListener("click", submitGuess);
-    topRow.addEventListener("click", letterClick)
-    homeRow.addEventListener("click", letterClick)
-    btmRow.addEventListener("click", letterClick)
+
+    let letterBtns = document.querySelectorAll(".letter");
+    console.log(letterBtns)
+    letterBtns.forEach((el) => {
+        console.log(el)
+        el.addEventListener("click", letterClick)
+    })
+    // for (let letter in letterBtns){
+    //     console.log(letter)
+
+    //     letter.addEventListener("click", letterClick)
+
+    // }
+
+    // Adding listeners to the buttons via the parent element allows user to guess the parent element if they click between letters
+    // topRow.addEventListener("click", letterClick)
+    // homeRow.addEventListener("click", letterClick)
+    // btmRow.addEventListener("click", letterClick)
+
 
     // Listener for playAgain button
     playAgainBtn.addEventListener("click", reset);
@@ -84,9 +104,12 @@
     }
 
     function letterClick (e){
-        console.log(e.srcElement.innerText)
         // buildGuess(e.srcElement.innerText)
-        buildGuess(e.srcElement.innerText)
+        let clickedLetter = e.srcElement.id;
+
+        if (clickedLetter !== "del" && clickedLetter !== "enter"){
+            buildGuess(clickedLetter)
+        }
     }
 
 
@@ -95,7 +118,8 @@
         // Check if input is a letter
         // https://internetdrew.medium.com/how-to-detect-a-letter-key-on-key-events-with-javascript-c749820dcd27
         if (e.code === `Key${e.key.toUpperCase()}`){
-            buildGuess(e);
+            let pressedLetter = e.key
+            buildGuess(pressedLetter);
         } else if (e.key === "Enter") {
             submitGuess();
         } else if (e.key === "Backspace") {
@@ -118,12 +142,13 @@
 
     // Create an array with typed letters (hold in-memory until user submits guess)
     // Display letters as user types
-    function buildGuess(e){
-        userGuess.push(e.key)
+    function buildGuess(letter){
+        userGuess.push(letter)
         userGuess.forEach((char,idx) => {
             // Display the char in the appropriate HTML element
             let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
             // Place the character in the inner text
+            // squareEl.innerHTML = char.toUpperCase();
             squareEl.innerHTML = char.toUpperCase();
         });
     }
@@ -132,7 +157,7 @@
     function submitGuess(){
         // Check guess is 5 letters
         if (userGuess.length < 5) {
-            outcomeMessage.innerText = "Too short!";
+            outcomeMessage.innerText = tooShort;
             sleep(1500).then(() => {
                 outcomeMessage.innerText = defaultMessage;
             });
@@ -141,7 +166,7 @@
 
         // Check whether guess is a word
         if (spellCheck() !== true){
-            outcomeMessage.innerText = "Not a valid word";
+            outcomeMessage.innerText = invalidWord;
             // Delay 2 seconds, then clear guess and display defaultMessage
             sleep(1500).then(() => {
                 deleteInnerText(guessCount);
@@ -179,8 +204,7 @@
         // Check for the userGuess in the DICT
         let isWord = userGuess.join("")
         let dictSearch = DICT[userGuess[0]].some((word) => {
-                return isWord === word;
-            })
+            return word === isWord});
         return dictSearch;
         }
 
