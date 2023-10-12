@@ -166,6 +166,7 @@
         userGuess.forEach((char, idx) => {
             results.push(checkGuess(char,idx));
         })
+        console.log(results)
         // Apply conditional colors HTML elements using indexed values in results array
         results.forEach((result,idx) => {
             let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
@@ -211,11 +212,6 @@
     }
 
 
-            // If user guesses letter and not in word -> gray
-        // Create an array of incorrect guesses
-        // Create an array of correct guesses
-        // Create an array of diffPos guess -> splice when the pos is correct
-
     function spellCheck() {
         // Check for the userGuess in the DICT
         let isWord = userGuess.join("")
@@ -224,35 +220,34 @@
         return dictSearch;
         }
 
-    // What if it returned an object of char: result
     function checkGuess(char, idx) {
         // Check the char against secretWord and return the result (key in the CHECKS constant)
         if(char === secretWord[idx]) {
             // Try adding to samePos array
             checkArray(samePos, char);
             // Check if in diffPos array and remove if it is
-            if (diffPos.includes(char)) {
-                // Get char's index in diffPos
-                let index = diffPos.indexOf(char)
-                // Splice char's index from diffPos
-                diffPos.splice(index, 1)
-            }
+            // if (diffPos.includes(char)) {
+            //     // Get char's index in diffPos
+            //     let index = diffPos.indexOf(char)
+            //     // Splice char's index from diffPos
+            //     diffPos.splice(index, 1)
+            // }
             return "inSamePos";
         } else if (secretWord.includes(char)){
             // Check if letter is green
-            if (samePos.includes(char)) {
-                return true;
-            } else { // Otherwise, try adding to diffPos array
-                checkArray(diffPos, char);
-            }
+            // Returning true breaks the results array
+            // if (samePos.includes(char)) {
+            //     return true;
+            // } else { // Otherwise, try adding to diffPos array
+            //     checkArray(diffPos, char);
+            // }
+            checkArray(diffPos, char);
             return "inDiffPos";
         } else{
             checkArray(notIn, char)
             return "notIn";
         }
     }
-
-// If guess contains the same letter twice, but secretWord only contains it once, the second occurance isn't handled
 
     function checkArray(arrayName, char) {
         if (arrayName.includes(char)) {
