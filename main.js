@@ -176,7 +176,6 @@
         // Find the letter in keyboard arrays, then apply conditional formatting
         letterBtns.forEach((el) => {
             if (samePos.includes(el.id)) {
-                console.log(el.id)
                 el.style.backgroundColor = CHECKS.inSamePos;
                 el.style.borderColor = CHECKS.inSamePos;
                 el.style.color = "white";
