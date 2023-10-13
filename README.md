@@ -9,21 +9,37 @@ The game ends when the user guesses the word or loses by playing 6 incorrect gue
 
 Unlike the New York Times' version, users can choose to play again with a new secret word, rather than waiting until the next day.
 
-## Play the Game!
+## Screenshots
 
-Click [me](https://github.com/caitlinfcorrigan/wordle)!
-
+![Quordle Start Page](./Final%20Images/Wordle%20-%20Start.png)
+![Quordle Win](./Final%20Images/Wordle%20-%20Win.png)
+![Quordle Loss](./Final%20Images/Wordle%20-%20Loss.png)
 
 ## Technologies Used
 HTML, CSS, JavaScript, DOM
 
+## Getting Started
 
-## Wireframes
+Click [me](https://caitlinfcorrigan.github.io/wordle/) to play!
+
+You have 6 guesses to find the secret word! Each guess hints towards the word.
+If your guess contains a letter in the same position as the secret word, it displays in green. If the secret word contains the letter in a differnt position, the letter displays in yellow. Letters not in the secret word display in gray.
+
+
+## Next Steps
+* Continue improving the logic to account for words that have repeated letters (like icily or eerie).
+    * If the user's guess repeats a letter, but it only occurs once in the secret word, turn the second occurance gray.
+* Add animation to reveal the correctness of a user's guess.
+* Update the CSS to ensure the on-screen keyboard's letters always display in a square button instead of stretching.
+
+## Planning Materials
+
+### Wireframes
 
 <!-- local image -->
 ![Wordle Wireframe](wireframe.png) ![Quordle Wireframe](wireframe-stretch.png)
 
-## MVP Needs
+### MVP Needs
 * Generate a list of valid, 5-letter word from an English dictionary or other source
 * Add the list of words to an array as uppercase strings
 * Pick a secret word from the list
@@ -41,7 +57,7 @@ HTML, CSS, JavaScript, DOM
 * At the end, display button to allow the player to play again with a new word
 
 
-## Stretch Goals
+### Stretch Goals
 * The game displays an on-screen keyboard which highlights guessed letters according to correctness:
     * Dark gray: Letter is not in the secret word
     * Yellow: Letter is in the secret word, but a different position
@@ -51,7 +67,7 @@ HTML, CSS, JavaScript, DOM
 * Display game rules before the player can begin playing and include examples
 * Animate the reveal of green/yellow letters after user clicks Guess
 
-### Big Stretches
+#### Big Stretches
 * Display the keyboard with shifted letters, rather than as a plain grid
 * Expand game to Quordle:
     * Display 4 grids and generate 4 secret words
@@ -62,7 +78,7 @@ HTML, CSS, JavaScript, DOM
 * Display the four grids across the screen if it's a desktop (in mobile, display as 2x2 grid)
 
 
-## Potential Roadblocks
+### Potential Roadblocks
 * Loading the word list into memory
 * Rendering an on-screen QWERTY keyboard with Return/Enter and Backspace keys
 * Accepting keyboard and on-screen inputs
