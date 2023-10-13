@@ -1,6 +1,5 @@
 * {
     box-sizing: border-box;
-
 }
 
 body {
@@ -52,7 +51,6 @@ button {
     flex-wrap: wrap;
     justify-content: center;
 }
-
 
 .keyboard > button {
     min-width: 7vmin;
