@@ -28,9 +28,10 @@ If your guess contains a letter in the same position as the secret word, it disp
 
 ## Next Steps
 * Continue improving the logic to account for words that have repeated letters (like icily or eerie).
-    * If the user's guess repeats a letter, but it only occurs once in the secret word, turn the second occurance gray.
+    * If the user's guess repeats a letter, but it only occurs once in the secret word, turn the incorrect, second occurence gray.
 * Add animation to reveal the correctness of a user's guess.
 * Update the CSS to ensure the on-screen keyboard's letters always display in a square button instead of stretching.
+* Implement scoring (ie total wins, total losses, and longest streak)
 
 ## Planning Materials
 
