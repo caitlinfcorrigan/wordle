@@ -11,9 +11,9 @@ Unlike the New York Times' version, users can choose to play again with a new se
 
 ## Screenshots
 
-![Quordle Start Page](./Final%20Images/Wordle%20-%20Start.png)
-![Quordle Win](./Final%20Images/Wordle%20-%20Win.png)
-![Quordle Loss](./Final%20Images/Wordle%20-%20Loss.png)
+![Quordle Start Page](./Final-Images/Wordle%20-%20Start.png)
+![Quordle Win](./Final-Images/Wordle%20-%20Win.png)
+![Quordle Loss](./Final-Images/Wordle%20-%20Loss.png)
 
 ## Technologies Used
 HTML, CSS, JavaScript, DOM
