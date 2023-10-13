@@ -7,7 +7,6 @@ body {
     font-family: 'Rajdhani', sans-serif;
     height: 10vh;
     margin-bottom: 3vh;
-    /* margin: 0; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,7 +15,6 @@ body {
 h1 {
     font-size: 6vmin;
     justify-content: center;
-
     margin: 0;
 }
 
@@ -36,7 +34,6 @@ h2 {
 }
 
 .game-grid > div {
-    gap: .75vmin;
     text-align: center;
     font-size: 6vmin;
     border: solid rgb(110, 115, 115) .5vmin; 
@@ -58,8 +55,6 @@ button {
 
 
 .keyboard > button {
-    font-size: 4vh;
-    justify-content: center;
     min-width: 7vmin;
     min-height: 5vmin;
     margin: 3px;
