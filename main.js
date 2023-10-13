@@ -8,35 +8,22 @@
     // For generating the secretWord
     const LETTERS = "abcdefghijklmnopqrstuvwxyz";
 
-    // Mini dictionary for testing
-    // const DICT  = {
-    //     a: ["apple", "atoms", "antsy"],
-    //     b: ["batty", "backs", "butts"],
-    //     c: ["catty", "chats", "comma", "cutie"]
-    // }
-
     // Using word list from https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
     import DICT from "./dictFull.json" assert { type: "json" };
 
     const defaultMessage = "Type a word then press Enter to guess";
-    const winMessage = "You smart cookie! You won!";
+    const winMessage = "You're smart cookie! You won!";
     const lossMessage = "Maybe next time.";
     const invalidWord = "Not a valid word.";
     const tooShort = "Your guess is too short.";
 
 /*----- STATE VARIABLES -----*/
     let secretWord;
-
-    // Count the number of guesses? Or just do a check of the board's array?
     let guessCount = 0;
+    let userGuess = []; // Current guess
+    let gameEnd = false;  // Variable to control display of Play Again button
 
-    // Holds the user's guess until submitted
-    let userGuess = [];
-
-    // Variable to control display of Play Again button
-    let gameEnd = false;
-
-    // Keyboard guess arrays
+    // Arrays to show correctness in the on-screen keyboard
     let notIn = [];
     let diffPos = [];
     let samePos = [];
@@ -45,67 +32,67 @@
     
     const outcomeMessage = document.querySelector("h2");
     const playAgainBtn = document.querySelector("#play-again");
-    // Hide playAgain by default
-    playAgainBtn.style.visibility = 'hidden';
+    playAgainBtn.style.visibility = 'hidden';    // Hide playAgain by default
 
-
-    //On-screen buttons
+    //On-screen keyboard
     const delBtn = document.querySelector("#del");
-    const enterBtn = document.querySelector("#enter")
+    const enterBtn = document.querySelector("#enter");
     const letterBtns = document.querySelectorAll(".letter");
 
 /*----- EVENT LISTENERS -----*/
+    // Listener for playAgain button
+    playAgainBtn.addEventListener("click", reset);
+
     // Listener for keydown; calls function to determine appropriate response
-    document.addEventListener("keydown", checkKeyDown)
+    document.addEventListener("keydown", checkKeyDown);
 
     // Listeners for on-screen Del and Enter buttons
     delBtn.addEventListener("click", deleteLetter);
     enterBtn.addEventListener("click", submitGuess);
 
-    // Add listeners to every letter button
+    // Add listeners to every on-screen letter button
     letterBtns.forEach((el) => {
-        el.addEventListener("click", letterClick)
+        el.addEventListener("click", letterClick);
     })
-
-    // Listener for playAgain button
-    playAgainBtn.addEventListener("click", reset);
-
 
 /*----- FUNCTIONS -----*/
 
     function getSecretWord() {
         // Generate random number 0-26, then lookup in the LETTERS string
         let charIdx = Math.floor(Math.random() * (26 - 0) + 0);
-        let char = LETTERS[charIdx]
+        let char = LETTERS[charIdx];
         // Get the length of that char's array, then choose a random index in it
-        let length = DICT[char].length
+        let length = DICT[char].length;
         let wordIdx = Math.floor(Math.random() * length);
+        // Pick word from dictonary using the random char and index
         secretWord = DICT[char][wordIdx];
-        console.log(secretWord);
     }
 
-    // Wait function for temporary message displays
-    // https://www.sitepoint.com/delay-sleep-pause-wait/
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    // Fill the userGuess array as the user types/clicks and display in grid
+    function buildGuess(letter){
+        userGuess.push(letter);
+        userGuess.forEach((char,idx) => {
+            // Display the char in the appropriate HTML element
+            let squareEl = document.querySelector(`#g${guessCount}c${idx}`);
+            // Place the character in the inner text
+            squareEl.innerHTML = char.toUpperCase();
+        });
     }
 
     function letterClick (e){
-        // buildGuess(e.srcElement.innerText)
+        // Get the letter from the event, then pass to buildGuss
         let clickedLetter = e.srcElement.id;
-
         if (clickedLetter !== "del" && clickedLetter !== "enter"){
-            buildGuess(clickedLetter)
+            buildGuess(clickedLetter);
         }
     }
 
-
-    // Keydown function -- calls buildGuess, submitGuess, deleteLetter, or throwInvalid
+    // Handle all keydown events using buildGuess, submitGuess, deleteLetter
     function checkKeyDown(e) {
         // Check if input is a letter
         // https://internetdrew.medium.com/how-to-detect-a-letter-key-on-key-events-with-javascript-c749820dcd27
         if (e.code === `Key${e.key.toUpperCase()}`){
-            let pressedLetter = e.key
+            let pressedLetter = e.key;
             buildGuess(pressedLetter);
         } else if (e.key === "Enter") {
             submitGuess();
@@ -121,26 +108,19 @@
         // Get array length (to determine DOM elem to clear)
         let lastLetter = userGuess.length
         // Delete last letter from userGuess
-        userGuess.pop()
+        userGuess.pop();
         // Delete last letter from the DOM
         let squareEl = document.querySelector(`#g${guessCount}c${lastLetter-1}`)
         squareEl.innerHTML = "";
     }
 
-    // Create an array with typed letters (hold in-memory until user submits guess)
-    // Display letters as user types
-    function buildGuess(letter){
-        userGuess.push(letter)
-        userGuess.forEach((char,idx) => {
-            // Display the char in the appropriate HTML element
-            let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
-            // Place the character in the inner text
-            // squareEl.innerHTML = char.toUpperCase();
-            squareEl.innerHTML = char.toUpperCase();
-        });
+    // Wait function for temporary message displays
+    // https://www.sitepoint.com/delay-sleep-pause-wait/
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    // Callback function for click on Guess button / press Enter
+    // When user submits their guess
     function submitGuess(){
         // Check guess is 5 letters
         if (userGuess.length < 5) {
@@ -150,10 +130,9 @@
             });
             return;
         }
-        // Check whether guess is a word
+        // Check whether guess is in dictionary; if not, delete guess from userGuess and grid
         if (spellCheck() !== true){
             outcomeMessage.innerText = invalidWord;
-            // Delay 2 seconds, then clear guess and display defaultMessage
             sleep(1500).then(() => {
                 deleteInnerText(guessCount);
                 outcomeMessage.innerText = defaultMessage;
@@ -161,23 +140,22 @@
             });
             return;
         } 
-        // For each char, run checkGuess to compare to secretWord
+        // Create an array to hold results of checkGuess for each letter in userGuess
         let results = [];
         userGuess.forEach((char, idx) => {
             results.push(checkGuess(char,idx));
         })
-        console.log(results)
-        // Apply conditional colors HTML elements using indexed values in results array
+        // Apply conditional formatting to HTML elements using indexed values in the results array
         results.forEach((result,idx) => {
-            let squareEl = document.querySelector(`#g${guessCount}c${idx}`)
+            let squareEl = document.querySelector(`#g${guessCount}c${idx}`);
             squareEl.style.backgroundColor = CHECKS[result];
             squareEl.style.borderColor = CHECKS[result];
             squareEl.style.color = "white";
         })
+        // Apply conditional formatting to letters in the on-screen keyboard
         keyColor();
 
-        // Check for win:
-        // If every element in results array is "inSamePos", return true       
+        // If every element in the results array is "inSamePos", return true; pass t/f as arg into checkForWin    
         let winResults = results.every((result) => result === "inSamePos");
         checkForWin(winResults);
 
@@ -186,8 +164,16 @@
         clearArrays(userGuess);
     }
 
+    function spellCheck() {
+        // Check for the userGuess in the DICT
+        let isWord = userGuess.join("")
+        let dictSearch = DICT[userGuess[0]].some((word) => {
+            return word === isWord});
+        return dictSearch;
+    }
+
     function keyColor() {
-        // Compare every key button to notIn array
+        // Find the letter in keyboard arrays, then apply conditional formatting
         letterBtns.forEach((el) => {
             if (samePos.includes(el.id)) {
                 console.log(el.id)
@@ -206,41 +192,16 @@
                 el.style.color = "white";
                 return;
             }
-
-
         })
     }
 
-
-    function spellCheck() {
-        // Check for the userGuess in the DICT
-        let isWord = userGuess.join("")
-        let dictSearch = DICT[userGuess[0]].some((word) => {
-            return word === isWord});
-        return dictSearch;
-        }
-
+    // Check a char from the guess against the secretWord and returns key for the CHECKS objects
+    // Track the correctness of letters in keyboard arrays (samePos, diffPos, notIn)
     function checkGuess(char, idx) {
-        // Check the char against secretWord and return the result (key in the CHECKS constant)
         if(char === secretWord[idx]) {
-            // Try adding to samePos array
             checkArray(samePos, char);
-            // Check if in diffPos array and remove if it is
-            // if (diffPos.includes(char)) {
-            //     // Get char's index in diffPos
-            //     let index = diffPos.indexOf(char)
-            //     // Splice char's index from diffPos
-            //     diffPos.splice(index, 1)
-            // }
             return "inSamePos";
         } else if (secretWord.includes(char)){
-            // Check if letter is green
-            // Returning true breaks the results array
-            // if (samePos.includes(char)) {
-            //     return true;
-            // } else { // Otherwise, try adding to diffPos array
-            //     checkArray(diffPos, char);
-            // }
             checkArray(diffPos, char);
             return "inDiffPos";
         } else{
@@ -249,6 +210,7 @@
         }
     }
 
+    // Check whether the char already exists in the keyboard array
     function checkArray(arrayName, char) {
         if (arrayName.includes(char)) {
             return true;
@@ -258,20 +220,18 @@
         }
     }
 
-    
+    // Ends game if passed a true value or guessCount is 5
     function checkForWin(winResults) {
          if (winResults) {
-            // Remove the event listener -- stop accepting key input
+            // Remove the keydown event listener to stop accepting input
             document.removeEventListener("keydown", checkKeyDown);
-            // Display Winner message
-            outcomeMessage.innerText = winMessage
-            // Display play again button
-            gameEnd = true;
+            outcomeMessage.innerText = winMessage;
+            gameEnd = true; // Displays play again button
             playAgain();
             return true;
          } else if (guessCount === 5) {
             document.removeEventListener("keydown", checkKeyDown);
-            outcomeMessage.innerText = lossMessage
+            outcomeMessage.innerText = lossMessage;
             gameEnd = true;
             playAgain();
          } else {
@@ -279,6 +239,12 @@
         }
     }
 
+    function playAgain() {
+        playAgainBtn.style.visibility = gameEnd ? 'visible' : 'hidden';
+        gameEnd = false;
+    }
+
+    // When Play Again button is clicked, reset the grid and keyboard
     function reset(e) {
         // Reset every row of DOM element using loops and the deleteInnerText function
         for (let g = 0; g < guessCount; g++) {
@@ -286,10 +252,8 @@
         }
         // Clear Win/Loss message and display default
         outcomeMessage.innerText = defaultMessage;
-        // Delete the current guess from the userGuess array
-        // clearArrays(userGuess);
 
-        // Reset keyboard
+        // Reset keyboard to default display
         letterBtns.forEach((el) => {
             el.style.backgroundColor = "rgb(239,239,239)";
             el.style.borderColor = "rgb(110, 115, 115)";
@@ -297,35 +261,28 @@
         })
 
         // Clear all arrays
-        clearArrays(userGuess)
-        clearArrays(notIn)
-        clearArrays(diffPos)
-        clearArrays(samePos)
+        clearArrays(userGuess);
+        clearArrays(notIn);
+        clearArrays(diffPos);
+        clearArrays(samePos);
 
-
-        // Reset guessCount to 0
         guessCount = 0;
-        // Add back the keydown event listener
-        document.addEventListener("keydown", checkKeyDown);
-        // Hide the Play Again button
-        playAgain();
+        document.addEventListener("keydown", checkKeyDown); // Add back the keydown event listener
+        playAgain(); // Hide the Play Again button
     }
 
-    function playAgain() {
-        playAgainBtn.style.visibility = gameEnd ? 'visible' : 'hidden';
-        gameEnd = false;
-    }
+
 
     function deleteInnerText(row) {
         for (let i = 4; i > -1; i--){
-            let squareEl = document.querySelector(`#g${row}c${i}`)
+            let squareEl = document.querySelector(`#g${row}c${i}`);
             squareEl.innerHTML = "";
             squareEl.style.backgroundColor = "white";
             squareEl.style.borderColor = "rgb(110, 110, 110)";
             squareEl.style.color = "black";
         }
     }
-    // Can this clear the keyboard arrays as well? Originally clearUserGuess with no param-- hardcoded to clear the one array
+
     function clearArrays(arrayToClear) {
         while (arrayToClear.length > 0) {
             arrayToClear.pop();
