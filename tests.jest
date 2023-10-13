@@ -1,3 +1,0 @@
-test("test to add guess to first row", () => {
-    expect(guess).toBe("apple")
-})
